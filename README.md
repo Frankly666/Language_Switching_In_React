@@ -21,6 +21,7 @@ extract 会根据其文件头部设定的 includes，excludes 遍历所在文件
 (2)溯源文件 dic.map.json 项目定义：
 ``` typescript
 interface MapItem {
+  pathname: string,
   id: string,
   raw: string,
   chn: string,
@@ -34,6 +35,7 @@ interface MapItem {
 ``` typescript
 [
   {
+    pathname: 'components/Click.tsx',
     id: "components_Click_tsx-13-3",
     raw: "<h1>百词斩</h1>",
     chn: "百词斩",
