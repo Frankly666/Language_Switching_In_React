@@ -17,8 +17,10 @@ const distRowPath = path.resolve(distPath, 'row')
 fs.mkdirSync(distRowPath)
 const distWordPath = path.resolve(distPath, 'word')
 fs.mkdirSync(distWordPath)
+const distMapPath = path.resolve(distPath, 'map')
+fs.mkdirSync(distMapPath)
 
-function checked(dir, dirname) {
+function checked(dir, dirname, map) {
   const files = fs.readdirSync(dir, { withFileTypes: true })
   for(const file of files) {
     const name = file.name
@@ -36,28 +38,45 @@ function checked(dir, dirname) {
             const line = lines[i];
             const str = line.replace(commentRegex, '');
             if(hanRegex.test(str)) {
-              const ChWords = hanRegexG[Symbol.match](line)
+              // const ChWords = hanRegexG[Symbol.match](line)
               // console.log(ChWords);
-              for(const ChWord of ChWords) {
+              let _line = line; // 需要对line进行替换
+              while(_line.match(hanRegex)) {
+                let ChWordInfo = _line.match(hanRegex)
                 fs.writeFileSync(path.join(distRowPath, `${dirname}.row.txt`), line , {
                   encoding: 'utf-8',
                   flag: 'a'
                 })
-                fs.writeFileSync(path.join(distWordPath, `${dirname}.word.txt`), ChWord + '\n' , {
+                fs.writeFileSync(path.join(distWordPath, `${dirname}.word.txt`), ChWordInfo[0] + '\n' , {
                   encoding: 'utf-8',
                   flag: 'a'
+                })
+                _line = _line.replace(hanRegex, new Array(ChWordInfo[0].length).fill('-').join(''))
+                map.push({
+                  path: path.join(dir, name),
+                  id: `${path.join(dir, name).replace(/[\/\\\.]/g, '_')}`,
+                  raw: line,
+                  chn: ChWordInfo[0],
+                  lineNum: i, // 索引
+                  startAt: ChWordInfo.index,
+                  length: ChWordInfo[0].length
                 })
               }
             }
           }
       }
     }
-    if(file.isDirectory()) checked(path.join(dir, name), dirname)
+    if(file.isDirectory()) checked(path.join(dir, name), dirname, map)
   }
 }
 const projects = fs.readdirSync('src')
 for(const project of projects) {
-  checked(path.join(__dirname, 'src', project), project)
+  const map = []
+  checked(path.join('src', project), project, map)
+  fs.writeFileSync(path.join(distMapPath, `${project}.map.json`), JSON.stringify(map) , {
+    encoding: 'utf-8',
+    flag: 'w'
+  })
 }
 
 const output = fs.createWriteStream(path.resolve('dist.zip'))
