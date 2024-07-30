@@ -4,60 +4,40 @@ const hanRegex = /[，。？《》「」【】（）、·～！\u3400-\u4DB5\u4E
 const commentRegex = /\/\/.*|\/\*[\s\S]*?\*\/|^\s*\*.*/;
 const config = require('./extractor.config')
 
-// const archiver = require('archiver')
-
-// 创建打包后的文件
 if (fs.existsSync('dist')) fs.rmSync('dist', { recursive: true })
-if (fs.existsSync('dist.zip')) fs.rmSync('dist.zip') // 可以不要, 但是加上更好
 const distPath = path.resolve('dist')
 fs.mkdirSync(distPath)
 const distRowPath = path.resolve(distPath, 'row')
 fs.mkdirSync(distRowPath)
-const distWordPath = path.resolve(distPath, 'word')
-fs.mkdirSync(distWordPath)
 const distMapPath = path.resolve(distPath, 'map')
 fs.mkdirSync(distMapPath)
 
-const entryPath = path.join(config.entry)
+const entryPath = path.join('src')
 
-function checked(dir, dirname, map) {
+function checked(dir, dirname, map, row) {
   const files = fs.readdirSync(dir, { withFileTypes: true })
   fileFor: for (const file of files) {
     const name = file.name
     if (file.isFile()) {
-      for(const expect of config.excludeFileNameHas) {
-        if(name.toLowerCase().includes(expect)) continue fileFor;
-      }
-      // endsWidth 不能是正则表达式
-      if (
-        //  name.endsWith('.json') || 
-        name.endsWith('.js') ||
-        name.endsWith('.ts') ||
-        name.endsWith('.tsx') ||
-        name.endsWith('.jsx')) {
+      if(toReg(config.exclude).test(path.join(dir, name).replace(/[\/\\]/g, '\\'))) continue fileFor;
+      if (toReg(config.include).test(name)) {
         const content = fs.readFileSync(path.join(dir, name), 'utf-8').toString()
         const lines = content.split('\n')
         for (let i = 0; i < lines.length; i++) {
           const line = lines[i];
           const str = line.replace(commentRegex, '');
           if (hanRegex.test(str)) {
-            // const ChWords = hanRegexG[Symbol.match](line)
-            // console.log(ChWords);
-            let _line = line; // 需要对line进行替换
+            let _line = line;
             while (_line.match(hanRegex)) {
               let ChWordInfo = _line.match(hanRegex)
-              fs.writeFileSync(path.join(distRowPath, `${dirname}.row.txt`), line, {
-                encoding: 'utf-8',
-                flag: 'a'
-              })
-              fs.writeFileSync(path.join(distWordPath, `${dirname}.word.txt`), ChWordInfo[0] + '\n', {
-                encoding: 'utf-8',
-                flag: 'a'
+              const id = `${path.join(dir, name).replace(/[\/\\\.]/g, '_')}-${i}-${ChWordInfo.index}`.slice(4)
+              row.push({
+                [id]: ChWordInfo[0]
               })
               _line = _line.replace(hanRegex, new Array(ChWordInfo[0].length).fill('-').join(''))
               map.push({
                 path: path.join(dir, name),
-                id: `${path.join(dir, name).replace(/[\/\\\.]/g, '_')}-${i}-${ChWordInfo.index}`,
+                id,
                 raw: line,
                 chn: ChWordInfo[0],
                 lineNum: i, // 索引
@@ -69,21 +49,24 @@ function checked(dir, dirname, map) {
         }
       }
     }
-    if (file.isDirectory()) checked(path.join(dir, name), dirname, map)
+    if (file.isDirectory()) checked(path.join(dir, name), dirname, map, row)
   }
 }
 const projects = fs.readdirSync(entryPath)
 for (const project of projects) {
   const map = []
-  checked(path.join(entryPath, project), project, map)
+  const row = []
+  checked(path.join(entryPath, project), project, map, row)
   fs.writeFileSync(path.join(distMapPath, `${project}.map.json`), JSON.stringify(map), {
+    encoding: 'utf-8',
+    flag: 'w'
+  })
+  fs.writeFileSync(path.join(distRowPath, `${project}.dic.json`), JSON.stringify(row), {
     encoding: 'utf-8',
     flag: 'w'
   })
 }
 
-// const output = fs.createWriteStream(path.resolve('dist.zip'))
-// const archive = archiver('zip', { zlib: { level: 9 } })
-// archive.pipe(output)
-// archive.directory('dist/', false)
-// archive.finalize()
+function toReg(arr) {
+  return new RegExp(arr.join('|').replace(/\*/g, '.*').replace(/[\/\\]/g, '\\'))
+}

@@ -1,4 +1,4 @@
 module.exports = {
-  entry: 'src',
-  excludeFileNameHas: ['demo']
+  include: ['*.js$', '*.jsx$', '*.ts$', '*.tsx$'],
+  exclude: ['Demo']
 }
