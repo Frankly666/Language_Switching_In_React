@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "extracter": "node extracter.js",
+    "extracterTest": "jest extracter.test.js"
   },
   "keywords": [],
   "author": "",
