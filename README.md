@@ -9,12 +9,8 @@
 ### extractor
 extract 会根据其文件头部设定的 includes，excludes 遍历所在文件夹符合的所有文件内容，生成(1)中文字典 以及(2)溯源文件 map。
 
-(1)中文字典 zh-cn.dic.json
+(1)中文字典 zh-cn.dic.json 内容形如：
 ``` typescript
-interface Dic {
-  [key: string]: string
-}
-
 {
   // "FilePathName-RowNum-ColNum": ",
   "components_Click_tsx-13-3": "百词斩",
@@ -22,7 +18,7 @@ interface Dic {
 }
 ```
 
-(2)溯源文件 dic.map.json
+(2)溯源文件 dic.map.json 项目定义：
 ``` typescript
 interface MapItem {
   id: string,
@@ -32,7 +28,10 @@ interface MapItem {
   startAt: number,
   length: number
 }
+```
 
+其内容形如：
+``` typescript
 [
   {
     id: "components_Click_tsx-13-3",
@@ -54,7 +53,9 @@ interface MapItem {
 ```js
 const replacerArr = [
   (m: MapItem) => m.raw.splice(m.startAt - 1, m.length + 2, `t(${m.id})`), // 删除前后字符，替换为 t(linenumber)
-  (m: MapItem) => m.raw.splice(m.startAt, m.length, `{t(${m.id})}`) // 替换为 t(linenumber)，再前后加上{}
+  (m: MapItem) => m.raw.splice(m.startAt, m.length, `{t(${m.id})}`), // 替换为 t(linenumber)，再前后加上{}
+  (m: MapItem) => m.raw + `// Fixme: 这段手动改 t(${m.id})`,
+  (m: MapItem) => m.raw.splice(m.startAt, m.length, `${t(${m.id})}`), // 替换为 t(linenumber)，再前后加上${}
 ]
 
 ```
