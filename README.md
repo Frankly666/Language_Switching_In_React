@@ -55,7 +55,7 @@ const replaceRule = [
   (m: MapItem) => m.raw.splice(m.startAt - 1, m.length + 2, `t(${m.id})`), // 删除前后字符，替换为 t(linenumber)
   (m: MapItem) => m.raw.splice(m.startAt, m.length, `{t(${m.id})}`), // 替换为 t(linenumber)，再前后加上{}
   (m: MapItem) => m.raw + `// Fixme: 这段手动改 t(${m.id})`,
-  (m: MapItem) => m.raw.splice(m.startAt, m.length, `${t(${m.id})}`), // 替换为 t(linenumber)，再前后加上${}
+  (m: MapItem) => m.raw.splice(m.startAt, m.length, `$\{t(${m.id})}`), // 替换为 t(linenumber)，再前后加上${}
 ]
 
 ```
