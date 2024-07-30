@@ -7,7 +7,7 @@
 本工具有两个主要的脚本，extracter 与 replacer
 
 ### extractor
-extract 会根据设定的 [includes]，[excludes] 遍历所在文件夹符合的所有文件内容，生成(1)中文字典 以及(2)溯源文件 map。
+extract 会根据其文件头部设定的 includes，excludes 遍历所在文件夹符合的所有文件内容，生成(1)中文字典 以及(2)溯源文件 map。
 
 (1)中文字典 zh-cn.dic.json
 ``` typescript
@@ -50,7 +50,7 @@ interface MapItem {
 交互式命令行工具 replacer 会根据用户配置的方法以及溯源文件替换原字符串。
 执行结束后，用户应手动处理语法冲突。
 
-用户可配置替换方式：
+用户可在 replacer 头部配置替换方式：
 ```js
 const replacerArr = [
   (m: MapItem) => m.raw.splice(m.startAt - 1, m.length + 2, `t(${m.id})`), // 删除前后字符，替换为 t(linenumber)
