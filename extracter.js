@@ -4,7 +4,7 @@ const hanRegex = /[，。？《》「」【】（）、·～！\u3400-\u4DB5\u4E
 const commentRegex = /\/\/.*|\/\*[\s\S]*?\*\/|^\s*\*.*/;
 const config = require('./extractor.config')
 
-const archiver = require('archiver')
+// const archiver = require('archiver')
 
 // 创建打包后的文件
 if (fs.existsSync('dist')) fs.rmSync('dist', { recursive: true })
@@ -82,8 +82,8 @@ for (const project of projects) {
   })
 }
 
-const output = fs.createWriteStream(path.resolve('dist.zip'))
-const archive = archiver('zip', { zlib: { level: 9 } })
-archive.pipe(output)
-archive.directory('dist/', false)
-archive.finalize()
+// const output = fs.createWriteStream(path.resolve('dist.zip'))
+// const archive = archiver('zip', { zlib: { level: 9 } })
+// archive.pipe(output)
+// archive.directory('dist/', false)
+// archive.finalize()

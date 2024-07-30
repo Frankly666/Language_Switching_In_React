@@ -71,3 +71,7 @@ const replaceRule = [
 4.修改 replacer 脚本头部的 replaceRule，配置可能的替换方式
 5.运行 replacer 脚本，交互式命令行会逐一询问并修改源文件，直至全部完成
 
+## extractor:
+- 把需要翻译的工程放入src下面
+- 启动项目npm run extracter
+- 会构建出一个dist文件,包含中文所在的映射(map), 行内原文(row),中文译意(word)
