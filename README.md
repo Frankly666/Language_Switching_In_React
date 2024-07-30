@@ -48,7 +48,7 @@ interface MapItem {
 ```
 
 ### replacer
-交互式命令行工具 replacer 会根据用户配置的方法以及溯源文件替换原字符串。
+交互式命令行工具 replacer 会根据用户配置的方法以及溯源文件 dic.map.json 替换原字符串。
 执行结束后，用户应手动处理语法冲突。
 
 用户可在 replacer 头部配置替换方式：
@@ -61,3 +61,13 @@ const replaceRule = [
 ]
 
 ```
+
+## 如何使用
+
+0.由于脚本的不可控性，修改前注意 commit
+1.将两个脚本复制到需要处理的文件放到需要处理的工程根目录
+2.修改 extractor.config.js 配置的 excludeFileNameHas 和 entry，配置不需要遍历的文件名所含单词、需要遍历的文件类型等内容
+3.运行 extractor 脚本，即可在当前文件夹获得 zh-cn.dic.json 与 dic.map.json 文件。至此，获得了中文字典可供国际化翻译。
+4.修改 replacer 脚本头部的 replaceRule，配置可能的替换方式
+5.运行 replacer 脚本，交互式命令行会逐一询问并修改源文件，直至全部完成
+
