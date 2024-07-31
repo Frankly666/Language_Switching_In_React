@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["./src/*"] //
+    }
+  },
+  "ts-node": {
+    "compilerOptions": {
+      "module": "NodeNext"
+    },
+    "transpileOnly": true,
+    "files": true
+  },
+  "include": ["src/**/*.ts"]
+}
