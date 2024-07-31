@@ -6,8 +6,7 @@
   "scripts": {
     "extracter": "node extracter.js",
     "extracterTest": "jest extracter.test.js",
-    "test": "ts-node src/replacer/index.ts",
-    "start": "ts-node src/index.ts"
+    "test": "ts-node src/replacer/index.ts"
   },
   "keywords": [],
   "author": "",
@@ -20,7 +19,7 @@
     "typescript": "^5.5.4"
   },
   "dependencies": {
-    "archiver": "^7.0.1",
+    "glob": "^10.3.15",
     "inquirer": "^10.1.6"
   }
 }
