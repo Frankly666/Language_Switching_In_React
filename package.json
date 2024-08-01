@@ -6,7 +6,7 @@
   "scripts": {
     "extracter": "node extracter.js",
     "extracterTest": "jest extracter.test.js",
-    "test": "ts-node src/tools/replacer/index.ts"
+    "replace": "ts-node src/tools/replacer/index.ts"
   },
   "keywords": [],
   "author": "",

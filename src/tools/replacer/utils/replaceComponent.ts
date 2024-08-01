@@ -5,7 +5,7 @@ import readline from "readline";
 import type { IMapItem } from "../type";
 import removeLineBreaks from "./removeLineBreaks";
 
-function replaceContentOfComponent(mapItem: IMapItem, newString: string) {
+async function replaceContentOfComponent(mapItem: IMapItem, newString: string) {
   let filePath = path.join(
     __dirname,
     `../../../../../fe_lib_international_tool/${mapItem.path}`
@@ -35,7 +35,7 @@ function replaceContentOfComponent(mapItem: IMapItem, newString: string) {
 
       // 替换整个字符串
       const newLine = line.replace(oldString, newString);
-      
+
       fileLines.push(newLine);
       isReplaced = true;
     } else {
@@ -46,9 +46,11 @@ function replaceContentOfComponent(mapItem: IMapItem, newString: string) {
 
   rl.on("close", () => {
     if (isReplaced) {
-      // 如果替换了字符串，写入整个文件
-      fs.writeFileSync(filePath, fileLines.join("\n"), { encoding: "utf8" });
-      console.log("字符串已替换");
+      // 如果替换了字符串，异步写入整个文件
+      fs.promises
+        .writeFile(filePath, fileLines.join("\n"), { encoding: "utf8" })
+        .then(() => console.log("文件内容已更新"))
+        .catch((err) => console.error("写入文件时出错:", err));
     } else {
       console.log("未找到指定的字符串进行替换");
     }

@@ -27,13 +27,13 @@ export async function replacer(mapItem: IMapItem, dic: IDicJsonFile) {
   // 这里直接拿到解析规则
   if (rulesOptions) {
     const answer = await select({
-      message: `原句为:${coloredRaw}\n请选择匹配的解析规则:`,
+      message: `请选择匹配的解析规则:`,
       choices: rulesOptions,
     });
     let newRaw = answer(mapItem);
 
     // 最终去替换组件页面中的文字
-    replaceContentOfComponent(mapItem, newRaw);
+    await replaceContentOfComponent(mapItem, newRaw);
 
     // 判断一下是否需要跳过
     let isSkip =

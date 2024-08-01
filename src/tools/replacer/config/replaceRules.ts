@@ -55,10 +55,10 @@ export function handlePreview(mapItem: IMapItem) {
   for (let [index, value] of replaceRules.entries()) {
     // 转化一下更美观
     let name: string = replaceSummary[index];
-    let description = `预览: ${value(mapItem)} `;
+    let description = ` 原句: ${mapItem.raw} \n 预览: ${value(mapItem)} `;
 
     // "跳过"操作就不用展示预览
-    if(index === replaceRules.length - 1) description = "";
+    if(index === replaceRules.length - 1) description = " 原句: ${mapItem.raw}";
 
     rulesOptions.push({ name, value, description });
   }
