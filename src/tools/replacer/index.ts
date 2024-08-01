@@ -2,6 +2,7 @@ import { IDicJsonFile, IMapItem } from "./type";
 import { getFiles } from "./utils/fileDirRead";
 import { readAndParseJsonFile } from "./utils/jsonParse";
 import { history, loadHistory } from "./utils/preserveProgress";
+import { printDivider } from "./utils/printDivider";
 import { replacer } from "./utils/replacer";
 
 //  首先需要拿到每一条的数据, 然后根据数据进行命令行操作
@@ -12,7 +13,7 @@ async function main() {
 
   // 只需要加载一次history
   loadHistory();
-
+  printDivider();
 
   for (let i = 0; i < mapFiles.length; i++) {
     const mapMessage = await readAndParseJsonFile(mapFiles[i]);
@@ -32,4 +33,3 @@ async function main() {
 }
 
 main();
-// 处理完所有字符串后，可以输出一些结束信息

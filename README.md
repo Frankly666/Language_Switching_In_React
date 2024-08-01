@@ -82,7 +82,7 @@ const replaceRule = [
 * 正式运行之前需要进行相关配置
 ```
     1. 进入 src/tools/replacer/config/tagetFilesPath 文件去配置由extractor构建出来的map文件与row文件的路径.
-    2. 目标替换的工程文件应放在src目录下(工程文件直接放入src目录顶层), 此项由extractor的导出的map文件决定.
+    2. 目标替换的工程文件应放在src目录下(工程文件直接放入src目录顶层), 此项由extractor工具导出的map文件决定.
 ```
 * 使用ts-node运行或者将ts编译后运行 src/tools/replacer/index.ts 入口文件.(也可直接运行npm run replace)
 * 可在 src/tools/config/replaceRules.ts 中增添或修改替换方式
@@ -90,4 +90,4 @@ const replaceRule = [
 #### 注意与提示:
   1.  此工具只实现了将相关代码行的**文字替换为映射函数**, 但是并没有将映射函数导入工程文件.
   2.  使用者可**自己编写**映射函数或者**使用此工具已经封装的相关类**(src/tools/replacer/urils/dicMap.ts)
-  3.  该工具会记录已修改的代码行, 若想要重新进行修改, 需进入 src/tools/replacer/modifyHistory/history.json 中手动修改
+  3.  另外该工具会记录已修改的代码行, 若想要重新进行修改, 需进入 src/tools/replacer/modifyHistory/history.json 中手动删除记录

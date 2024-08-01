@@ -9,7 +9,7 @@ export const replaceRules: Array<IRuleFunction> = [
   },
   (m: IMapItem) => {
     let chars = m.raw.split("");
-    chars.splice(m.startAt - 1, m.length + 2, `{t("${m.id}")}`);
+    chars.splice(m.startAt, m.length, `{t("${m.id}")}`);
     return chars.join("");
   },
   (m: IMapItem) => {
@@ -29,6 +29,11 @@ export const replaceRules: Array<IRuleFunction> = [
     return chars.join("");
   },
   // 这里可以添加其他解析规则......
+  (m: IMapItem) => {
+    let chars = m.raw.split(""); // 转换为字符数组
+    chars.splice(m.startAt, m.length, `t("${m.id}")`); // 进行splice操作
+    return chars.join(""); // 转换回字符串
+  },
 
   // 此函数放在最后
   (m: IMapItem) => {
@@ -43,7 +48,8 @@ const replaceSummary: Array<string> = [
   "3. 有点复杂打个标签先",
   "4. 替换为 t(id)，再加上${}",
   "5. 替换为 ' + t(id) + '",
-  "6. 跳过这条"  // 此条放在最后与上面函数进行对应
+  "6. 直接将文字替换成 t(id)",
+  "7. 跳过这条"  // 此条放在最后与上面函数进行对应
 ];
 
 const rulesOptions: Array<IChoices> = [];
@@ -58,7 +64,7 @@ export function handlePreview(mapItem: IMapItem) {
     let description = ` 原句: ${mapItem.raw} \n 预览: ${value(mapItem)} `;
 
     // "跳过"操作就不用展示预览
-    if(index === replaceRules.length - 1) description = " 原句: ${mapItem.raw}";
+    if(index === replaceRules.length - 1) description = ` 原句: ${mapItem.raw}`;
 
     rulesOptions.push({ name, value, description });
   }

@@ -29,7 +29,7 @@ async function replaceContentOfComponent(mapItem: IMapItem, newString: string) {
   // 一行一行的读取(使用split("\n")会出现问题)
   rl.on("line", (line) => {
     if (currentLine === lineNum) {
-      // 先去除最最后的换行符(会影响替换)
+      // 先去除最后的换行符(会影响替换)
       oldString = removeLineBreaks(oldString);
       newString = removeLineBreaks(newString);
 
@@ -46,11 +46,7 @@ async function replaceContentOfComponent(mapItem: IMapItem, newString: string) {
 
   rl.on("close", () => {
     if (isReplaced) {
-      // 如果替换了字符串，异步写入整个文件
-      fs.promises
-        .writeFile(filePath, fileLines.join("\n"), { encoding: "utf8" })
-        .then(() => console.log("文件内容已更新"))
-        .catch((err) => console.error("写入文件时出错:", err));
+      fs.writeFileSync(filePath, fileLines.join("\n"), { encoding: "utf8" });
     } else {
       console.log("未找到指定的字符串进行替换");
     }
