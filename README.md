@@ -1,9 +1,9 @@
 # 代码国际化脚本
 
-## 脚本的目标
+## >脚本的目标
 在范围内遍历项目文件，找到拥有中文的代码行，生成中文字典用于翻译。运行交互式命令行工具，采用可设置的方式替换源代码。
 
-## 如何工作
+## >如何工作
 本工具有两个主要的脚本，extracter 与 replacer
 
 ### extractor
@@ -62,7 +62,7 @@ const replaceRule = [
 
 ```
 
-## 如何使用
+## >如何使用
 
 - 由于脚本的不可控性，修改前注意 commit
 - 将两个脚本复制到需要处理的文件放到需要处理的工程根目录
@@ -71,7 +71,22 @@ const replaceRule = [
 - 修改 replacer 脚本头部的 replaceRule，配置可能的替换方式
 - 运行 replacer 脚本，交互式命令行会逐一询问并修改源文件，直至全部完成
 
-## extractor:
+## >工具使用指南
+
+### extractor:
 - 把需要翻译的工程放入src下面
 - 启动项目npm run extracter
 - 会构建出一个dist文件,包含中文所在的映射(map), 行内原文(row)
+
+### replacer:
+* 正式运行之前需要进行相关配置
+```
+    1. 进入 src/tools/replacer/config/tagetFilesPath 文件去配置由extractor构建出来的map文件与row文件的路径.
+    2. 目标替换的工程文件应放在src目录下(工程文件直接放入src目录顶层), 此项由extractor的导出的map文件决定.
+```
+* 使用ts-node运行或者将ts编译后运行 src/tools/replacer/index.ts 入口文件。
+* 可在 src/tools/config/replaceRules.ts 中增添或修改替换方式
+
+#### 注意:
+  1.  此工具只实现了将相关代码行的**文字替换为映射函数**, 但是并没有将映射函数导入工程文件.
+  2.  使用者可**自己编写**映射函数或者**使用此工具已经封装的相关类**(src/tools/replacer/urils/dicMap.ts)

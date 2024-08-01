@@ -6,7 +6,6 @@ import rulesOptions, {
 } from "../config/replaceRules";
 import type { IMapItem, IDicJsonFile } from "@/tools/replacer/type";
 import { printDivider } from "./printDivider";
-import { setDic } from "./dicMap";
 import replaceContentOfComponent from "./replaceComponent";
 import { preserveProgress } from "./preserveProgress";
 
@@ -18,7 +17,7 @@ export async function replacer(mapItem: IMapItem, dic: IDicJsonFile) {
   let raw = mapItem.raw;
 
   // 设置当前的字典
-  setDic(dic);
+  // setDic(dic);
   // 设置当前的预览
   handlePreview(mapItem);
 
