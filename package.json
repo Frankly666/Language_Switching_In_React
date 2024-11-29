@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "extracter": "node extracter.js",
+    "extracter": "node src/tools/extractor/extracter.js",
     "extracterTest": "jest extracter.test.js",
     "replace": "ts-node src/tools/replacer/index.ts"
   },

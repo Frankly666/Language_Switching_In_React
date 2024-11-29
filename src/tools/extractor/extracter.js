@@ -22,7 +22,6 @@ function checked(curProject, map, row) {
     { ignore: config.exclude }
   );
 
-  console.log(filePaths)
 
   for (const filePath of filePaths) {
     const content = fs.readFileSync(filePath, "utf-8").toString();
